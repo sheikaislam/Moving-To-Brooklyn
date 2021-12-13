@@ -1,0 +1,14 @@
+--Seeing created Hive table:
+select * from service_calls limit 25;
+
+--Checking how zipcodes are stored:
+select zipcode, count(*) from service_calls group by zipcode;
+
+--Checking the different complaints that exist:
+select complaintype, count(*) as cnt from service_calls group by complaintype having cnt > 100;
+
+--Trying to use zipcode and complainttype together:
+select zipcode, complaintype, count(*) as cnt from service_calls group by zipcode, complaintype having cnt > 100;
+
+--Trying to understand how to organize the rows containing complaint types into columns grouped by zipcode:
+SELECT zipcode,  Sum(CASE WHEN complaintype = 'Noise - Residential' THEN 1 ELSE 0 END) AS Noise_Residential, Sum(CASE WHEN complaintype = 'Illegal Parking' THEN 1 ELSE 0 END) AS Illegal_Parking, Sum(CASE WHEN complaintype = 'HEAT/HOT WATER' THEN 1 ELSE 0 END) AS Heat-hotwater, FROM service_calls GROUP BY zipcode;

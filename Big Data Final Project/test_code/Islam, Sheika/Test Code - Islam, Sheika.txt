@@ -1,0 +1,15 @@
+SELECT * FROM Crashes LIMIT 25; -- to see a part of my Hive table
+
+SELECT zipcode, COUNT(persons_injured) as persons_injured, COUNT(persons_killed) as persons_killed FROM crashes GROUP BY zipcode; --different syntax using COUNT
+
+create external table Poverty (borough INT, off_pov_threshold INT, num_household INT, work_status INT, fam_type INT) ROW FORMAT DELIMITED FIELDS TERMINATED BY ',' STORED AS TEXTFILE; -- creating table for poverty dataset
+
+SELECT borough, AVG(num_household) as num_household, AVG(fam_type) as fam_type from poverty GROUP BY borough; --poverty profiling
+
+Select * from Crashes
+Join
+Select * from Poverty
+On (Crashes.burough = Poverty.burough); --joining from two tables
+
+
+
