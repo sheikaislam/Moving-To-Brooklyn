@@ -1,0 +1,4 @@
+On command prompt:
+scp C:/Users/Afnan/Desktop/311_Service_Requests_from_Jan_2019_Brooklyn.tsv  ah4672@peel.hpc.nyu.edu:/home/ah4672
+On HDFS:
+hdfs dfs -put 311_Service_Requests_from_Jan_2019_Brooklyn.tsv

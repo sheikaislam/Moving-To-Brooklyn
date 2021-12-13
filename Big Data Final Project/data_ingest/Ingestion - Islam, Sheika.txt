@@ -1,0 +1,57 @@
+On command prompt:
+scp /Users/shnislam/Desktop/BigData\ /Clean.java si965@peel.hpc.nyu.edu:/home/si965
+scp /Users/shnislam/Desktop/BigData\ /CleanMapper.java si965@peel.hpc.nyu.edu:/home/si965
+scp /Users/shnislam/Desktop/BigData\ /CleanReducer.java si965@peel.hpc.nyu.edu:/home/si965
+
+scp /Users/shnislam/Desktop/BigData\ /Clean1.java si965@peel.hpc.nyu.edu:/home/si965
+scp /Users/shnislam/Desktop/BigData\ /CleanMapper1.java si965@peel.hpc.nyu.edu:/home/si965
+scp /Users/shnislam/Desktop/BigData\ /CleanReducer1.java si965@peel.hpc.nyu.edu:/home/si965
+
+scp /Users/shnislam/Desktop/BigData\ /crashes.csv si965@peel.hpc.nyu.edu:/home/si965
+scp /Users/shnislam/Desktop/BigData\ /poverty.csv si965@peel.hpc.nyu.edu:/home/si965
+
+scp /Users/shnislam/Desktop/BigData\ /Crashescleaned.csv si965@peel.hpc.nyu.edu:/home/si965
+scp /Users/shnislam/Desktop/BigData\ /Povertycleaned.csv si965@peel.hpc.nyu.edu:/home/si965
+
+
+On HDFS:
+hdfs dfs -mkdir project -- directory for poverty
+hdfs dfs -mkdir project1 -- directory for crashes
+hdfs dfs -mkdir projecthive -- directory for the hive table
+
+**MAPREDUCE FOR POVERTY**
+
+rm *.class rm *.jar
+hdfs dfs -rm -r -f project
+javac -classpath `yarn classpath` -d . CleanMapper.java
+javac -classpath `yarn classpath` -d . CleanReducer.java
+javac -classpath `yarn classpath`:. -d . Clean.java
+jar -cvf Clean.jar *.class
+hdfs dfs -mkdir project hdfs dfs -mkdir project/input
+hdfs dfs -put povertymeas.tsv project/input
+hadoop jar Clean.jar Clean project/input /user/si965/project/output
+hdfs dfs -cat project/output/part-r-00000
+
+**MAPREDUCE FOR CRASHES**
+
+rm *.class rm *.jar
+hdfs dfs -rm -r -f project1
+javac -classpath `yarn classpath` -d . CleanMapper1.java
+javac -classpath `yarn classpath` -d . CleanReducer1.java
+javac -classpath `yarn classpath`:. -d . Clean1.java
+jar -cvf Clean1.jar *.class
+hdfs dfs -mkdir project1 hdfs dfs -mkdir project1/input
+hdfs dfs -put crashes.tsv project1/input
+hadoop jar Clean1.jar Clean1 project1/input /user/si965/project1/output
+hdfs dfs -cat project1/output/part-r-00000
+
+**HIVE**
+hdfs dfs -put Crashescleaned.csv hiveproject
+hadoop fs -copyFromLocal /home/si965/Crashescleaned.csv /user/si965/projecthive
+
+create external table Crashes (zipcode INT, persons_injured INT, persons_killed INT) ROW FORMAT DELIMITED FIELDS TERMINATED BY ',' STORED AS TEXTFILE;
+
+load data inpath '/user/si965/projecthive/Crashescleaned.csv' into table Crashes; (not necessary anymore)
+
+SELECT zipcode, COUNT(persons_injured) as persons_injured, COUNT(persons_killed) as persons_killed FROM crashes GROUP BY zipcode;
+

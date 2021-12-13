@@ -1,0 +1,3 @@
+create external table Crashes (zipcode INT, persons_injured INT, persons_killed INT) ROW FORMAT DELIMITED FIELDS TERMINATED BY ',' STORED AS TEXTFILE location '/user/si965/projecthive/';
+
+SELECT zipcode, Sum(persons_injured) AS persons_injured, Sum(persons_killed) AS persons_killed FROM crashes GROUP BY zipcode;
