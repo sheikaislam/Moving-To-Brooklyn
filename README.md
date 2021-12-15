@@ -1,4 +1,4 @@
-# Moving-To-Brooklyn
+# Moving To Brooklyn
 
 This is a project for my Processing  Big Data for Analytics Applications class at New York University. My teammates and I used MapReduce to clean and profile our datasets and then we used Hive to join the datasets to create analytics. 
 
